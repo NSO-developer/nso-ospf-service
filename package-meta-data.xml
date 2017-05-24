@@ -1,0 +1,13 @@
+<ncs-package xmlns="http://tail-f.com/ns/ncs-packages">
+  <name>ospf</name>
+  <package-version>1.0</package-version>
+  <description>Generated Python package</description>
+  <ncs-min-version>4.3</ncs-min-version>
+
+  <component>
+    <name>ospf</name>
+    <application>
+      <python-class-name>ospf.ospf.Start</python-class-name>
+    </application>
+  </component>
+</ncs-package>

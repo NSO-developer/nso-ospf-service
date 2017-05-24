@@ -1,0 +1,45 @@
+<config-template xmlns="http://tail-f.com/ns/config/1.0">
+  <devices xmlns="http://tail-f.com/ns/ncs">
+  <device>
+    <name>{/ospf-device/device}</name>
+      <config>
+      <router xmlns="urn:ios" >
+        <ospf>
+          <id>{string(../ospf/ospf-id)}</id>
+          <area>
+            <id>{string(../ospf/ospf-area-id-ip-address)}</id>
+            <authentication>
+              <message-digest/>
+            </authentication>
+            <range>
+              <ip>{string(../ospf/ospf-area-range-ip)}</ip>
+              <mask>{string(../ospf/ospf-area-range-netmask)}</mask>
+            </range>
+          </area>
+          <passive-interface>
+            <default/>
+          </passive-interface>
+          <disable>
+            <passive-interface>
+              <interface>GigabitEthernet{ospf-disable-passive-gigabit-interface}</interface>
+            </passive-interface>
+          </disable>
+          <!-- router-id>{$ROUTER-ID}</router-id -->
+          <router-id>{ospf-router-id-ip-address}</router-id>
+          <!-- router-id>{string(current()/../../../../ncs:devices/ncs:device[name=/mdf-device/device-name]/ncs:config/ios:interface/Loopback[name='0']/ip/address/primary/address)}</router-id -->
+          <redistribute>
+            <static>
+              <subnets/>
+            </static>
+          </redistribute>
+          <network>
+            <ip>{string(../ospf/ospf-area-range-ip)}</ip>
+            <mask>{string(../ospf/ospf-network-netmask)}</mask>
+            <area>{string(../ospf/ospf-area-id-ip-address)}</area>
+          </network>
+        </ospf>
+      </router>
+      </config>
+  </device>
+  </devices>
+</config-template>

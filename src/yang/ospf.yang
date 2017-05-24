@@ -1,0 +1,87 @@
+module ospf {
+
+  namespace "http://example.com/ospf";
+  prefix ospf;
+
+  import ietf-inet-types {
+    prefix inet;
+  }
+  import tailf-common {
+    prefix tailf;
+  }
+  import tailf-ncs {
+    prefix ncs;
+  }
+
+  description
+    "OSPF routing configuration";
+
+  revision 2016-01-01 {
+    description
+      "Initial revision support IOS in a campus architecture";
+  }
+
+  grouping ospf-grouping {
+    container ospf {
+      leaf ospf-id {
+        tailf:info "Unique ID";
+        type uint32;
+      }
+      leaf ospf-area-id-ip-address {
+        tailf:info "A.B.C.D;; OSPF area id ip address (eg. 10.134.84.0)";
+        type inet:ipv4-address;
+      }
+      leaf ospf-area-range-ip {
+        tailf:info "A.B.C.D;; OSPF area range ip address (eg. 10.62.82.0)";
+        type inet:ipv4-address;
+      }
+      leaf ospf-area-range-netmask {
+        tailf:info "A.B.C.D;; OSPF area range netmask (eg. 255.255.254.0)";
+        type inet:ipv4-address;
+      }
+      leaf ospf-network-netmask {
+        tailf:info "A.B.C.D;; OSPF area network netmask (eg. 0.0.0.255)";
+        type inet:ipv4-address;
+      }
+    }
+  }
+
+  augment /ncs:services {
+  container vlan {
+  list ospf {
+    description "OSPF routing coniguration on IOS";
+
+    key ospf-service-id;
+    leaf ospf-service-id {
+      tailf:info "Unique ID";
+      type string;
+    }
+
+    uses ncs:service-data;
+    ncs:servicepoint ospf-servicepoint;
+
+    uses ospf-grouping;
+
+    list ospf-device {
+      tailf:info "Device to apply the OSPF configuration to";
+      key device;
+      leaf device {
+        tailf:info "Device to apply the OSPF configuration to";
+        type leafref {
+          path "/ncs:devices/ncs:device/ncs:name";
+        }
+      }
+      leaf ospf-router-id-ip-address {
+        tailf:info "A.B.C.D;; OSPF router id ip address - Defaults to Loopback0 address";
+        type inet:ipv4-address;
+      }
+      leaf-list ospf-disable-passive-gigabit-interface {
+        tailf:info "Passive interface to disable";
+        type string;
+      }
+    }
+
+  }
+  }
+  }
+}
